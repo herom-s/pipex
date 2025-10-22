@@ -15,39 +15,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-char	**allocate_cmd_str(char **cmd_split, int *count)
-{
-	char	**cmd_str;
-
-	*count = 0;
-	while (cmd_split[*count])
-		(*count)++;
-	cmd_str = ft_calloc(*count + 1, sizeof(char *));
-	return (cmd_str);
-}
-
-char	**build_cmd_str(char **cmd_split, char *bin_path)
-{
-	char	**cmd_str;
-	char	*tmp_str;
-	int		count;
-	int		j;
-
-	cmd_str = allocate_cmd_str(cmd_split, &count);
-	if (!cmd_str)
-		return (NULL);
-	tmp_str = ft_strjoin(bin_path, "/");
-	cmd_str[0] = ft_strjoin(tmp_str, cmd_split[0]);
-	free(tmp_str);
-	j = 1;
-	while (j < count)
-	{
-		cmd_str[j] = ft_strdup(cmd_split[j]);
-		j++;
-	}
-	return (cmd_str);
-}
-
 static int	check_path(char *path, char *argv)
 {
 	char	*tmp_path;
@@ -62,6 +29,19 @@ static int	check_path(char *path, char *argv)
 	return (result == 0);
 }
 
+static char	**create_fallback_cmd(char **cmd_split)
+{
+	char	**cmd_str;
+
+	cmd_str = ft_calloc(2, sizeof(char *));
+	if (!cmd_str)
+		return (free_split(cmd_split));
+	cmd_str[0] = ft_strdup(cmd_split[0]);
+	cmd_str[1] = NULL;
+	free_split(cmd_split);
+	return (cmd_str);
+}
+
 static char	**is_command_valid(char **bin_paths, char *cmd_arg)
 {
 	char	**cmd_split;
@@ -69,8 +49,12 @@ static char	**is_command_valid(char **bin_paths, char *cmd_arg)
 	int		i;
 
 	cmd_split = split_args(cmd_arg);
-	if (!cmd_split)
+	if (!cmd_split || !cmd_split[0])
+	{
+		if (cmd_split)
+			free_split(cmd_split);
 		return (NULL);
+	}
 	i = 0;
 	while (bin_paths[i])
 	{
@@ -82,13 +66,7 @@ static char	**is_command_valid(char **bin_paths, char *cmd_arg)
 		}
 		i++;
 	}
-	cmd_str = ft_calloc(2, sizeof(char *));
-	if (!cmd_str)
-		return (free_split(cmd_split));
-	cmd_str[0] = ft_strdup(cmd_split[0]);
-	cmd_str[1] = NULL;
-	free_split(cmd_split);
-	return (cmd_str);
+	return (create_fallback_cmd(cmd_split));
 }
 
 int	validate_commands(char ***cmd_strs, char **bin_paths, char *argv[])

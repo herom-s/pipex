@@ -6,7 +6,7 @@
 #    By: hermarti <hermarti@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/21 09:35:18 by hermarti          #+#    #+#              #
-#    Updated: 2025/10/18 16:35:43 by hermarti         ###   ########.fr        #
+#    Updated: 2025/10/22 16:45:06 by hermarti         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,11 +34,22 @@ SRCS := $(SRC_DIR)main.c \
 		$(SRC_DIR)read_write_pipe.c \
 		$(SRC_DIR)read_write_pipe_utils.c \
 		$(SRC_DIR)check_util.c \
+		$(SRC_DIR)check_util2.c \
 		$(SRC_DIR)split_args.c \
 		$(SRC_DIR)split_args_util.c \
 		$(SRC_DIR)util.c
 
-SRCS_BONUS := $(SRC_BONUS_DIR)main_bonus.c
+SRCS_BONUS :=	$(SRC_BONUS_DIR)main_bonus.c \
+				$(SRC_BONUS_DIR)pipe_bonus.c \
+				$(SRC_BONUS_DIR)pipe_util_bonus.c \
+				$(SRC_BONUS_DIR)check_bonus.c \
+				$(SRC_BONUS_DIR)read_write_pipe_bonus.c \
+				$(SRC_BONUS_DIR)read_write_pipe_utils_bonus.c \
+				$(SRC_BONUS_DIR)check_util_bonus.c \
+				$(SRC_BONUS_DIR)check_util2_bonus.c \
+				$(SRC_BONUS_DIR)split_args_bonus.c \
+				$(SRC_BONUS_DIR)split_args_util_bonus.c \
+				$(SRC_BONUS_DIR)util_bonus.c
 
 OBJS := $(patsubst $(SRC_DIR)%.c,$(OBJ_DIR)%.o,$(SRCS))
 OBJS_BONUS := $(patsubst $(SRC_BONUS_DIR)%.c,$(OBJ_DIR)%.o,$(SRCS_BONUS))
@@ -74,7 +85,7 @@ $(NAME): $(LIBFT) $(OBJS)
 bonus: $(LIBFT) .bonus
 	@:
 
-.bonus: $(OBJS_BONUS)
+.bonus: $(LIBFT) $(OBJS_BONUS)
 	$(CC) $(CFLAGS) $(OBJS_BONUS) $(LIBFT) -I$(INC_BONUS_DIR) -o $(NAME)
 	@touch .bonus
 
@@ -87,3 +98,4 @@ fclean: clean
 	$(MAKE) -C $(LIBFT_DIR) fclean
 
 re: fclean all
+rebonus: fclean bonus
