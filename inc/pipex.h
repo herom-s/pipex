@@ -6,7 +6,7 @@
 /*   By: hermarti <hermarti@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 17:31:25 by hermarti          #+#    #+#             */
-/*   Updated: 2025/10/18 17:23:30 by hermarti         ###   ########.fr       */
+/*   Updated: 2025/10/22 14:33:36 by hermarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,23 +16,30 @@
 # define INPUT_END 0
 # define OUTPUT_END 1
 
-typedef enum e_pipe_file
+typedef enum e_pipe_type
 {
 	INPUT_FILE,
 	OUTPUT_FILE
-}					t_pipe_file;
+}					t_pipe_type;
 
 typedef struct s_pipe
 {
 	int				files_fd[2];
 	unsigned int	num_cmds;
-	int				*cmds_fd;
+	int				**cmds_fd;
 	char			***cmds_strs;
 	pid_t			*childs;
 }					t_pipe;
 
 int					init_pipe(t_pipe *p, char ***cmds_strs);
 void				destroy_pipe(t_pipe *p);
+
+int					read_write_pipe(t_pipe *p, char *infile, char *outfile,
+						char *envp[]);
+void				child_cleanup(t_pipe *p);
+void				close_all_pipes(t_pipe *p);
+int					open_file(char *filename, int flags, t_pipe *p);
+void				exec_cmd(char **cmd, char *envp[], t_pipe *p);
 
 char				***check_args(int argc, char *argv[], char *envp[]);
 int					validate_commands(char ***cmd_strs, char **bin_paths,

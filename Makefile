@@ -31,6 +31,8 @@ SRCS := $(SRC_DIR)main.c \
 		$(SRC_DIR)pipe.c \
 		$(SRC_DIR)pipe_util.c \
 		$(SRC_DIR)check.c \
+		$(SRC_DIR)read_write_pipe.c \
+		$(SRC_DIR)read_write_pipe_utils.c \
 		$(SRC_DIR)check_util.c \
 		$(SRC_DIR)split_args.c \
 		$(SRC_DIR)split_args_util.c \
