@@ -74,7 +74,7 @@ static int	handle_here_doc(t_pipe *p, char *limiter)
 		write(p->here_doc_fd[OUTPUT_END], line, ft_strlen(line));
 		free(line);
 	}
-	get_next_line(STDIN_FILENO);
+	get_next_line(-1);
 	close(p->here_doc_fd[OUTPUT_END]);
 	return (0);
 }
